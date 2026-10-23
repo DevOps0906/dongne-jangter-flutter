@@ -67,21 +67,49 @@ dongne-jangter-flutter/
 
 각 feature는 `data / domain / presentation` 세 층으로 나눕니다. 지금은 비어 있습니다.
 
-## 라우트 구조
+## 라우트 (웹과 같은 경로, 개발지시서 4장 기준)
 
-| 경로 | 탭 | 화면 |
-|---|---|---|
-| `/login` | — | 로그인 (탭 밖) |
-| `/home` | 홈 | 홈 피드 (검색·상품 상세·가격 제안으로 이어짐) |
-| `/community` | 동네생활 | 피드 (게시글 상세·글쓰기로 이어짐) |
-| `/write` | 글쓰기 | 사진 올리기 → 상품 정보 입력 |
-| `/chat` | 채팅 | 채팅 목록 → 채팅방 |
-| `/my` | 나의 | 메인 (판매·구매 내역, 관심목록, 프로필, 설정으로 이어짐) |
+| 구분 | 경로 | 화면 | 탭 바 |
+|---|---|---|---|
+| 인증·동네 | `/login`, `/login/verify` | 로그인·인증 | 없음 |
+| 인증·동네 | `/setup/location`, `/location/map` | 동네 설정·인증, 동네 지도 | 없음 |
+| 탭 | `/home` | 홈 피드 | 있음 |
+| 탭 | `/community` | 동네생활 피드 | 있음 |
+| 탭 | `/chat` | 채팅 목록 | 있음 |
+| 탭 | `/my` | 나의 중고거래마켓 | 있음 |
+| 전체 화면 | `/home/search` | 검색 | 없음 |
+| 전체 화면 | `/product/write`, `/product/:id`, `/product/:id/offer`, `/product/:id/edit` | 상품 등록·상세·가격 제안·수정 | 없음 |
+| 전체 화면 | `/chat/:roomId` | 채팅방 | 없음 |
+| 전체 화면 | `/community/write`, `/community/:id` | 동네생활 글쓰기·게시글 상세 | 없음 |
+| 전체 화면 | `/my/sales`, `/my/purchases`, `/my/likes`, `/my/settings` | 판매·구매 내역, 관심 목록, 설정 | 없음 |
+| 전체 화면 | `/profile/:userId`, `/review/write` | 판매자 프로필, 매너 평가 | 없음 |
+| 디버그 전용 | `/dev/states` | 상태 5종 미리보기 | 없음 |
+
+가운데 글쓰기 탭은 탭 전환이 아니라 `/product/write`를 여는 동작입니다.
+
+## 공용 위젯
+
+- `core/widgets/main_shell.dart`: 하단 5탭 (T-102)
+- `core/widgets/state_view.dart`: 상태 5종, 로딩은 스켈레톤 (T-103)
+- `core/widgets/placeholder_screen.dart`: 자리 표시 화면 (T-101)
+- `core/widgets/state_preview_screen.dart`: 상태 미리보기 (T-104)
+
+## 개발 방법
+
+1. 개발지시서(`spec/docs/dev/development-spec.md`)에서 작업 ID와 완료 기준을 확인합니다.
+2. `git submodule update --remote spec`으로 spec을 최신으로 맞춥니다.
+3. 토큰을 바꿨다면 `dart run tool/gen_tokens.dart`를 실행합니다.
+4. 구현하고 완료 기준을 하나씩 확인합니다.
+5. `flutter analyze`와 `flutter test`를 통과시킵니다.
+6. 커밋 제목은 `[작업ID] 변경 내용`으로 씁니다. 끝에 Co-Authored-By와 Claude-Session 줄을 붙입니다.
+
+새 화면을 만들 때는 `router.dart`의 같은 경로 `_page(...)`를 실제 화면 위젯으로 바꿉니다. 경로 순서에 주의하세요. `/product/write`처럼 구체적인 경로는 `/product/:id`보다 먼저 둡니다.
 
 ## 현재 상태
 
-- 완료: 프로젝트 뼈대, 토큰 기반 테마, 5탭 셸, 라우트 구조, Supabase 초기화 코드
-- 진행 예정: 화면 구현, 인증 흐름, 상태 5종(로딩·빈·오류·권한없음) 공용 위젯
+- 완료: 프로젝트 뼈대, 토큰 기반 테마, 21개 라우트 골격 (T-101), 하단 5탭 셸 (T-102), 상태 5종 공용 위젯 (T-103), 상태 미리보기 (T-104), 스모크 테스트 2개
+- 미검증: `flutter analyze`와 `flutter test`는 아직 실행하지 않았습니다 (Dart SDK 없는 환경에서 작성)
+- 진행 예정: P2 로그인과 동네 설정 (T-201~T-205), 인증 가드
 
 ## 주의
 
