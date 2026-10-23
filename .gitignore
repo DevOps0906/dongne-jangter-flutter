@@ -1,0 +1,33 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+coverage/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# OS
+.DS_Store
+
+# secrets (키는 --dart-define 으로만 넘깁니다)
+.env
+.env.*
+*.keystore
+*.jks
+key.properties
+google-services.json
+GoogleService-Info.plist
+
+# iOS / Android 빌드 산출물
+ios/Pods/
+ios/Flutter/Generated.xcconfig
+android/.gradle/
+android/local.properties
